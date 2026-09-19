@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Models;
+
+use Database\Factories\PurchaseReturnItemFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class PurchaseReturnItem extends Model
+{
+    /** @use HasFactory<PurchaseReturnItemFactory> */
+    use HasFactory;
+
+    protected $fillable = [
+        'return_id',
+        'product_id',
+        'batch_id',
+        'quantity',
+        'unit_price',
+        'subtotal',
+        'reason',
+        'notes',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'quantity' => 'decimal:2',
+            'unit_price' => 'decimal:2',
+            'subtotal' => 'decimal:2',
+        ];
+    }
+
+    public function purchaseReturn(): BelongsTo
+    {
+        return $this->belongsTo(PurchaseReturn::class, 'return_id');
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function batch(): BelongsTo
+    {
+        return $this->belongsTo(Batch::class);
+    }
+}
